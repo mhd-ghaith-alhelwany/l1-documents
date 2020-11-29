@@ -1,0 +1,41 @@
+{% extends 'docs/layout.html' %}
+{% block content %}
+    <h3 class="text-center">{{document.file_name}}</h3>
+    <br/>
+    <sub class="text-center" style="display: block"> <b>Created At:</b> {{ document.created_at }}</sub>
+    <hr class="m-5"/>
+    <select class="form-control" id="tablesSelect">
+    {% if not selected_table_id %}
+    <option>Select Table</option>
+    {% endif %}
+        {% for table in tables %}
+            <option url={% url 'show_table' id=document.id table_id=table.id %} value="{{ table.id }}" {% if selected_table_id and table.id == selected_table_id %} selected {% endif %}>{{ table.title }}</option>
+        {% endfor %}
+    </select>
+    <br/>
+    {% if selected_table_array %}
+    <div>
+        <table class="table table-striped">
+            {% for row in selected_table_array %}
+                <tr>
+                    {% for cell in row %}
+                        <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <a class="btn btn-primary" href={% url "download_table_json" id=selected_table_id %}>Download JSON</a>
+    <a class="btn btn-primary" href={% url "download_table_xml" id=selected_table_id %}>Download XML</a>
+    {% endif %}
+    <a class="btn btn-primary" href={% url "download_document" id=document.id %}>Download Document</a>
+{% endblock %}
+{% block script %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $("#tablesSelect").on("change", function(){
+            id = $("#tablesSelect").val()
+            window.location = $('#tablesSelect').find(":selected").attr("url")
+        })
+    </script>
+{% endblock %}

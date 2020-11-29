@@ -1,0 +1,14 @@
+{% extends 'docs/layout.html' %}
+{% block content %}
+    {% for document in documents %}
+        <a href="{{ document.id }}">
+            <div class="card">
+              <div class="card-body">
+                  {{ document.file_name }}
+              </div>
+            </div>
+        </a>
+    {% endfor %}
+    <br/>
+    <a class="btn btn-block btn-primary" href="add">Upload Document</a>
+{% endblock %}
